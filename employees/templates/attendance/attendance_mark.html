@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2>Mark Attendance</h2>
+
+<form method="POST">
+    {% csrf_token %}
+
+    <table class="table table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>Employee</th>
+                <th>Present</th>
+                <th>Absent</th>
+                <th>Leave</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for emp in employees %}
+            <tr>
+                <td>{{ emp.first_name }} {{ emp.last_name }}</td>
+
+                <td><input type="radio" name="{{ emp.id }}" value="Present"></td>
+                <td><input type="radio" name="{{ emp.id }}" value="Absent"></td>
+                <td><input type="radio" name="{{ emp.id }}" value="Leave"></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <button class="btn btn-success">Save Attendance</button>
+</form>
+
+{% endblock %}
