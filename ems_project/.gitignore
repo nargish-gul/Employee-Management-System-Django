@@ -1,15 +1,64 @@
-# Python
+########################################
+# PYTHON / DJANGO
+########################################
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
+*.pyc
+*.sqlite3
 
-# Django
-db.sqlite3
-media/
+# Django secret files
+.env
+*.env
+config.ini
+*.key
+*.pem
 
-# Virtual Environment
-venv/
+# Local Django settings
+settings_local.py
+local_settings.py
+
+########################################
+# VIRTUAL ENVIRONMENTS
+########################################
 env/
+venv/
 myenv/
+.venv/
 
-# IDE
+########################################
+# MYSQL / DATABASE
+########################################
+db.sqlite3
+*.sql
+
+
+########################################
+# LOGS & TEMP FILES
+########################################
+*.log
+*.pot
+*.pid
+*.seed
+*.pot
+*.coverage
+*.DS_Store
+
+########################################
+# WINDOWS SYSTEM FILES
+########################################
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+########################################
+# VISUAL STUDIO CODE
+########################################
 .vscode/
+.idea/
+
+########################################
+# GIT
+########################################
+*.orig
