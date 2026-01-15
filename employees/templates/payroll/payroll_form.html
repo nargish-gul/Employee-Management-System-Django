@@ -1,12 +1,54 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h2>Payroll Form</h2>
+<div class="container-fluid">
+    <div class="row justify-content-center">
 
-<form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Save</button>
-</form>
+        <!-- SAME WIDTH AS EMPLOYEE FORM -->
+        <div class="col-md-8 col-lg-6">
+
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-body p-4">
+
+                    
+                    <h3 class="mb-4 text-center fw-bold">Payroll Form</h3>
+
+                    <form method="post">
+                        {% csrf_token %}
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Employee</label>
+                            {{ form.employee }}
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Basic Salary</label>
+                            {{ form.basic_salary }}
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Allowances</label>
+                            {{ form.allowances }}
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">Deductions</label>
+                            {{ form.deductions }}
+                        </div>
+
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-success px-5">
+                                Save
+                            </button>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
 
 {% endblock %}

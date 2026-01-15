@@ -1,40 +1,61 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-3">
 
 
-<h2>Departments</h2>
-<a href="{% url 'department_add' %}" class="btn btn-primary">+Add New Department</a>
-</div>
 
-<table class="table table-bordered" border="1" cellpadding="10">
-    <thead class="table-dark">
-    <tr>
-        <th>#</th>
-        <th>Name</th>
-        <th>Description</th>
-        <th>Actions</th>
-    </tr>
-    </thead>
-    {% for dept in departments %}
-    <tr>
-        <td>{{ forloop.counter }}</td>
-        <td>{{ dept.name }}</td>
-        <td>{{ dept.description }}</td>
-        <td>
-            <a href="{% url 'department_edit' dept.id %}">Edit</a> |
-            <a href="{% url 'department_delete' dept.id %}" 
-               onclick="return confirm('Delete this department?')">
-               Delete
-            </a>
-        </td>
-    </tr>
-    {% empty %}
-    <tr><td colspan="4">No Departments Found</td></tr>
-    {% endfor %}
-</table>
+    <div class="d-flex justify-content-between mb-3">
+    <h2>Departments</h2>
+    <a href="{% url 'department_add' %}" class="btn btn-primary">+ Add New Department</a>
+    </div>
+
+
+<div class="container-fluid">
+    <div class="card shadow-sm">
+        <div class="card-body">
+
+             
+            
+
+            <table class="table table-bordered table-hover align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th style="width: 5%">#</th>
+                        <th style="width: 20%">Name</th>
+                        <th>Description</th>
+                        <th style="width: 15%">Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for dept in departments %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td><strong>{{ dept.name }}</strong></td>
+                        <td>{{ dept.description }}</td>
+                        <td>
+                            <a href="{% url 'department_edit' dept.id %}" 
+                               class="btn btn-warning btn-sm px-3">Edit</a>
+                            <a href="{% url 'department_delete' dept.id %}" 
+                               onclick="return confirm('Delete this department?')" 
+                               class="btn btn-danger btn-sm px-3">
+                               Delete
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center text-muted">
+                            No Departments Found
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
+
+        </div>
+    </div>
 </div>
 
 {% endblock %}

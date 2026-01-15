@@ -32,8 +32,15 @@
         <td>{{ pay.net_salary }}</td>
         <td>{{ pay.date }}</td>
         <td>
-            <a href="{% url 'payroll_edit' pay.id %}">Edit</a> |
-            <a href="{% url 'payroll_delete' pay.id %}" onclick="return confirm('Delete payroll?')">Delete</a> |
+    
+
+              <a href="{% url 'payroll_edit' pay.id %}" 
+                               class="btn btn-warning btn-sm px-3">Edit</a>
+                            <a href="{% url 'payroll_delete' pay.id %}" 
+                               onclick="return confirm('Delete payroll?')" 
+                               class="btn btn-danger btn-sm px-3">
+                               Delete
+                            </a>
             
         </td>
     </tr>

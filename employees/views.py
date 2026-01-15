@@ -1,6 +1,7 @@
 
 
 # Create your views here.
+from urllib import request
 from django.shortcuts import render, redirect, get_object_or_404
 
 from employees.permissions import hr_or_admin
@@ -26,7 +27,8 @@ from django.template.loader import render_to_string
 
 from django.http import JsonResponse, HttpResponse
 
-
+from datetime import date
+import calendar
 
 
 from .models import *
@@ -74,24 +76,86 @@ def employee_delete(request, id):
 
 
 # Dashboard view
+from django.db.models import Count
+from datetime import date
+
 @login_required
 def dashboard(request):
-    
+    today = date.today()
     total_employees = Employee.objects.count()
     total_departments = Department.objects.count()
-    present_today = Attendance.objects.filter(date=date.today(), status="Present").count()
-    leave_today = Attendance.objects.filter(date=date.today(), status="Leave").count()
 
-    role = request.user.userprofile.role
+    # ===== TODAY ATTENDANCE =====
+    present_today = Attendance.objects.filter(
+        date=today, status="Present"
+    ).count()
+
+    leave_today = Attendance.objects.filter(
+        date=today, status="Leave"
+    ).count()
+
+    absent_today = total_employees - (present_today + leave_today)
+
+    #  Employees per department
+    dept_data = Department.objects.annotate(emp_count=Count('employee'))
+    dept_names = [d.name for d in dept_data]
+    dept_counts = [d.emp_count for d in dept_data]
+
+    #  Attendance status
+    attendance_data = Attendance.objects.filter(date=date.today()) \
+        .values('status').annotate(count=Count('id'))
+
+    attendance_labels = [a['status'] for a in attendance_data]
+    attendance_counts = [a['count'] for a in attendance_data]
+
+
+    # monthly attendence
+    year = today.year
+    month = today.month
+    days_in_month = calendar.monthrange(year, month)[1]
+
+    days = list(range(1, days_in_month + 1))
+    present_counts = []
+    leave_counts = []
+    absent_counts = []
+
+    for day in days:
+        present = Attendance.objects.filter(
+            date=date(year, month, day),
+            status="Present"
+        ).count()
+
+        leave = Attendance.objects.filter(
+            date=date(year, month, day),
+            status="Leave"
+        ).count()
+
+        absent = total_employees - (present + leave)
+
+        present_counts.append(present)
+        leave_counts.append(leave)
+        absent_counts.append(absent)
+
 
     return render(request, 'dashboard.html', {
         'total_employees': total_employees,
         'total_departments': total_departments,
         'present_today': present_today,
         'leave_today': leave_today,
+        'absent_today': absent_today,
+
+        'dept_names': dept_names,
+        'dept_counts': dept_counts,
+
+
+        'attendance_labels': attendance_labels,
+        'attendance_counts': attendance_counts,
+
+        'days': days,
+        'present_counts': present_counts,
+        'leave_counts': leave_counts,
+        'absent_counts': absent_counts,  
     })
-
-
 
 
 

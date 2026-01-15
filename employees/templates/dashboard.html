@@ -1,42 +1,165 @@
 {% extends 'base.html' %}
+{% load static %}
+
 {% block content %}
+<div class="container-fluid">
+    <div class="row">
 
-<h2 class="mb-4">Dashboard</h2>
+        <!-- Main Content -->
+        <div class="col-md-12 main-content">
+            <h3 class="mb-4">Dashboard</h3>
 
-<div class="row">
+            <!-- Summary Cards -->
+            <div class="row g-4 mb-4">
+                <div class="col-md-3">
+                    <div class="dashboard-card card-employees">
+                        <h5>Total Employees</h5>
+                        <h3>{{ total_employees }}</h3>
+                    </div>
+                </div>
 
-    <div class="col-md-3">
-        <div class="card shadow-sm p-3">
-            <h5>Total Employees</h5>
-            <h3>{{ total_employees }}</h3>
+                <div class="col-md-3">
+                    <div class="dashboard-card card-dept">
+                        <h5>Departments</h5>
+                        <h3>{{ total_departments }}</h3>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="dashboard-card card-present">
+                        <h5>Today Present</h5>
+                        <h3>{{ present_today }}</h3>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="dashboard-card card-leave">
+                        <h5>On Leave</h5>
+                        <h3>{{ leave_today }}</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Row -->
+            <div class="row g-4">
+                <!-- Bar Chart -->
+                <div class="col-md-7">
+                    <div class="card shadow-sm p-3">
+                        <h5>Employees by Department</h5>
+                        <canvas id="deptChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Pie Chart -->
+                <div class="col-md-5">
+                    <div class="card shadow-sm p-3">
+                        <h5>Attendance Status</h5>
+                        <canvas id="attendanceChart"></canvas>
+                    </div>
+                </div>
+
+
+                <div class="row mt-4">
+    <div class="col-md-12">
+        <div class="card p-3 shadow-sm">
+            <h5 class="text-center">Monthly Attendance</h5>
+            <canvas id="monthlyAttendanceChart"></canvas>
         </div>
     </div>
 
     <div class="col-md-3">
-        <div class="card shadow-sm p-3">
-            <h5>Departments</h5>
-            <h3>{{ total_departments }}</h3>
-        </div>
+    <div class="card dashboard-card bg-danger text-white">
+        <h5>Absent</h5>
+        <h3>{{ absent_today }}</h3>
     </div>
-
-    <div class="col-md-3">
-        <div class="card shadow-sm p-3">
-            <h5>Today Present</h5>
-            <h3>{{ present_today }}</h3>
-        </div>
-    </div>
-
-    <div class="col-md-3">
-        <div class="card shadow-sm p-3">
-            <h5>On Leave</h5>
-            <h3>{{ leave_today }}</h3>
-        </div>
-    </div>
+</div>
 
 </div>
 
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Chart.js -->
+{{ dept_names|json_script:"deptNames" }}
+{{ dept_counts|json_script:"deptCounts" }}
+{{ attendance_labels|json_script:"attendanceLabels" }}
+{{ attendance_counts|json_script:"attendanceCounts" }}
+{{ days|json_script:"daysData" }}
+{{ present_counts|json_script:"presentData" }}
+{{ leave_counts|json_script:"leaveData" }}
+{{ absent_counts|json_script:"absentData" }}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const deptNames = JSON.parse(document.getElementById('deptNames').textContent);
+    const deptCounts = JSON.parse(document.getElementById('deptCounts').textContent);
+    const attendanceLabels = JSON.parse(document.getElementById('attendanceLabels').textContent);
+    const attendanceCounts = JSON.parse(document.getElementById('attendanceCounts').textContent);
+
+// monthly attendance chart data
+const days = JSON.parse(document.getElementById('daysData').textContent);
+const presentData = JSON.parse(document.getElementById('presentData').textContent);
+const leaveData = JSON.parse(document.getElementById('leaveData').textContent);
+const absentData = JSON.parse(document.getElementById('absentData').textContent);
+
+    // Bar Chart
+    new Chart(document.getElementById('deptChart'), {
+        type: 'bar',
+        data: {
+            labels: deptNames,
+            datasets: [{
+                label: 'Employees',
+                data: deptCounts,
+                borderWidth: 1
+            }]
+        }
+    });
+
+    // Pie Chart
+    new Chart(document.getElementById('attendanceChart'), {
+        type: 'pie',
+        data: {
+            labels: attendanceLabels,
+            datasets: [{
+                data: attendanceCounts
+            }]
+        }
+    });
 
 
+
+     new Chart(document.getElementById('monthlyAttendanceChart'), {
+        type: 'line',
+        data: {
+            labels: days,
+datasets: [
+    {
+        label: 'Present',
+        data: presentData,
+        tension: 0.3
+    },
+    {
+        label: 'Leave',
+        data: leaveData,
+        tension: 0.3
+    },
+
+    {
+        label: 'Absent',
+        data: absentData,
+        borderWidth: 2
+    },
+
+]
+
+
+        }
+    });
+</script>
 
 
 {% endblock %}

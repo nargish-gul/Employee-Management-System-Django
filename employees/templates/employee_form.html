@@ -1,17 +1,73 @@
 {% extends 'base.html' %}
+{% load static %}
+
 {% block content %}
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
 
-<h2>{{ form.instance.id|yesno:"Edit Employee,Add Employee" }}</h2>
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-header bg-dark text-white rounded-top-4">
+                    <h4 class="mb-0">➕ Add Employee</h4>
+                </div>
 
-<div class="card p-4 shadow-sm w-50">
-    <form method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button class="btn btn-success">Save</button>
-    </form>
+                <div class="card-body p-4">
+                    <form method="post">
+                        {% csrf_token %}
 
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">First Name</label>
+                                {{ form.first_name }}
+                            </div>
 
-    
+                            <div class="col-md-6">
+                                <label class="form-label">Last Name</label>
+                                {{ form.last_name }}
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Email</label>
+                                {{ form.email }}
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Phone</label>
+                                {{ form.phone }}
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Department</label>
+                                {{ form.department }}
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Position</label>
+                                {{ form.position }}
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Salary</label>
+                                {{ form.salary }}
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Date Joined</label>
+                                {{ form.date_joined }}
+                            </div>
+                        </div>
+
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn btn-success px-5">
+                                💾 Save Employee
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
 </div>
-
 {% endblock %}
